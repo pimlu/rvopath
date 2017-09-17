@@ -3,9 +3,12 @@ import 'dart:math';
 import '../spatial/spatial.dart';
 import 'controller.dart';
 
+Random rand = new Random();
+
 abstract class Shape extends Vec2 {
   Controller ctrl;
   Vec2 v = new Vec2();
+  String color = 'hsl(${rand.nextDouble()*360},100%,40%)';
   double maxv = 6.0;
   Shape([double x=0.0, y=0.0]) : super(x,y);
   void render(CanvasRenderingContext2D ctx);
@@ -24,6 +27,7 @@ class Circle extends Shape {
   void render(CanvasRenderingContext2D ctx) {
     ctx.beginPath();
     ctx.arc(x, y, r, 0, 2 * PI);
+    ctx.fillStyle = color;
     ctx.fill();
   }
   double vo(Shape o) {
