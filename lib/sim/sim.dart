@@ -15,16 +15,17 @@ class Sim {
 
   double minfps, t=0.0, last;
   Sim(this.canvas, this.minfps) : ctx = canvas.getContext('2d') {
-    int n = 0;
+    window.animationFrame.then(raf);
+    reset(120, 50.0, 0, 0);
+  }
+  void reset(int l, double rad, [int m=0, n=0]) {
+    space.clear();
     Vec2 center = _p2.vmul(0.5);
-    double rad = 2*20.0;
-    for(int i=0; i<n; i++) {
-      Vec2 offset = new Vec2.angle(i/n*2*PI, rad);
+    for(int i=0; i<l; i++) {
+      Vec2 offset = new Vec2.angle(i/l*2*PI, rad);
       space.add(new Circle.vec(center.vadd(offset), 0.5)
         ..ctrl = new Agent(center.vsub(offset)));
     }
-    n = 30; int m = 2;
-    //n=0; m=0;
     for(int i=0; i<n; i++) {
       for(int j=0; j<m; j++) {
         Vec2 offset = new Vec2(10.0*j/(m-1), 40.0*i/(n-1));
@@ -34,10 +35,8 @@ class Sim {
           ..ctrl = new Agent(right));
         space.add(new Circle.vec(right, 0.5)
           ..ctrl = new Agent(left));
-
       }
     }
-    window.animationFrame.then(raf);
   }
   void raf(double time) {
     if(last != null) tick(min(1/minfps, (time-last)/1000));
@@ -60,7 +59,7 @@ class Sim {
             disps.putIfAbsent(s, () => new Vec2());
             disps.putIfAbsent(o, () => new Vec2());
             disps[s] = disps[s].vadd(push);
-            disps[o] = disps[o].vadd(push);
+            disps[o] = disps[o].vsub(push);
           }
         }
       }

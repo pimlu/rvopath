@@ -34,6 +34,7 @@ abstract class Spatial<T extends Vec2> {
   final Vec2 tl, br;
   bool add(T v);
   bool remove(T v);
+  void clear();
   Iterable<T> within(double r, Vec2 p);
   Spatial(this.tl, this.br);
 }
@@ -41,6 +42,7 @@ abstract class Spatial<T extends Vec2> {
 class NaiveSpatial<T extends Vec2> extends Spatial<T> {
   bool add(T v) => vals.add(v);
   bool remove(T v) => vals.remove(v);
+  void clear() => vals.clear();
   Iterable<T> within(double r, Vec2 p) =>
     vals.where((v) => pow(v.x-p.x, 2)+pow(v.y-p.y, 2) <= r*r);
   NaiveSpatial(Vec2 tl, br) : super(tl, br);
