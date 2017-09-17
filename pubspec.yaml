@@ -1,5 +1,5 @@
 name: angular_app
-description: A web app that uses AngularDart
+description: RVO implementation in Dart
 version: 0.0.1
 
 environment:
