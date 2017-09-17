@@ -18,7 +18,7 @@ class Sim {
     window.animationFrame.then(raf);
     reset(120, 50.0, 0, 0);
   }
-  void reset(int l, double rad, [int m=0, n=0]) {
+  void reset(int l, double rad, [int m=0, n=0, double vmul=1.0]) {
     space.clear();
     Vec2 center = _p2.vmul(0.5);
     for(int i=0; i<l; i++) {
@@ -28,9 +28,10 @@ class Sim {
     }
     for(int i=0; i<n; i++) {
       for(int j=0; j<m; j++) {
-        Vec2 offset = new Vec2(10.0*j/(m-1), 40.0*i/(n-1));
-        Vec2 left = offset.vadd(new Vec2(20.0,10.0)).vmul(2.0),
-          right = offset.vadd(new Vec2(50.0,10.0)).vmul(2.0);
+        Vec2 offset = new Vec2(10.0*j/(m-1), vmul*40.0*i/(n-1));
+        double vpos = (1-vmul)/2*40.0+10.0;
+        Vec2 left = offset.vadd(new Vec2(20.0,vpos)).vmul(2.0),
+          right = offset.vadd(new Vec2(50.0,vpos)).vmul(2.0);
         space.add(new Circle.vec(left, 0.5)
           ..ctrl = new Agent(right));
         space.add(new Circle.vec(right, 0.5)
