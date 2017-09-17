@@ -13,7 +13,6 @@ class Sim {
 
   double minfps, t=0.0, last;
   Sim(this.canvas, this.minfps) : ctx = canvas.getContext('2d') {
-    window.animationFrame.then(raf);
     int n = 120;
     Vec2 center = _p2.vmul(0.5);
     double rad = 2*20.0;
@@ -22,6 +21,20 @@ class Sim {
       space.add(new Circle.vec(center.vadd(offset), 0.5)
         ..ctrl = new Agent(center.vsub(offset)));
     }
+    /*int n = 30, m = 2;
+    for(int i=0; i<n; i++) {
+      for(int j=0; j<m; j++) {
+        Vec2 offset = new Vec2(20.0*j/m, 40.0*i/n);
+        Vec2 left = offset.vadd(new Vec2(10.0,10.0)).vmul(2.0),
+          right = offset.vadd(new Vec2(50.0,10.0)).vmul(2.0);
+        space.add(new Circle.vec(left, 0.5)
+          ..ctrl = new Agent(right));
+        space.add(new Circle.vec(right, 0.5)
+          ..ctrl = new Agent(left));
+
+      }
+    }*/
+    window.animationFrame.then(raf);
   }
   void raf(double time) {
     if(last != null) tick(min(1/minfps, (time-last)/1000));

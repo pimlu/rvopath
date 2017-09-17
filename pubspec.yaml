@@ -10,7 +10,7 @@ dependencies:
 
 web:
   compiler:
-    debug: dartdevc
+    debug: dart2js
 
 dev_dependencies:
   angular_test: ^1.0.0

@@ -49,6 +49,6 @@ class Agent extends Controller {
 
     shape.v = oldv;
     acc = bestv.vadd(bestv.vsub(goalv).vmul(0.1))/*.vadd(goalv).vmul(0.5)*/
-      .vsub(shape.v).vnorm(maxa);
+      .vsub(shape.v).vnorm(maxa).vmul(min(1.0, shape.vsub(goalp).vmag/10));
   }
 }

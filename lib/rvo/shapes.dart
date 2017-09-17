@@ -6,11 +6,11 @@ import 'controller.dart';
 abstract class Shape extends Vec2 {
   Controller ctrl;
   Vec2 v = new Vec2();
-  double maxv = 4.0;
+  double maxv = 6.0;
   Shape([double x=0.0, y=0.0]) : super(x,y);
   void render(CanvasRenderingContext2D ctx);
   void step(double dt) {
-    v = v.vadd(ctrl.acc.vmul(dt));
+    v = v.vadd(ctrl.acc.vmul(dt)).vmul(pow(0.5, dt));
     if(v.vmag > maxv) v = v.vnorm(maxv);
     vcopy(vadd(v.vmul(dt)));
   }
