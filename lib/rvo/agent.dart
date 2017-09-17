@@ -9,7 +9,7 @@ final int scanRes = 17;//, subscanRes = 4, scanDepth = 2;
 
 class Agent extends Controller {
   Vec2 goalp;
-  double w = 10.0, u=1.0;
+  double w = 10.0, u=2.0;
   double seeDist = 5.0;
   double maxa = 10.0;
   Agent(this.goalp);

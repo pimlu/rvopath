@@ -1,5 +1,7 @@
 import 'dart:html';
 import 'dart:math';
+import 'dart:collection';
+
 import '../spatial/spatial.dart';
 import '../rvo/shapes.dart';
 import '../rvo/agent.dart';
@@ -13,7 +15,7 @@ class Sim {
 
   double minfps, t=0.0, last;
   Sim(this.canvas, this.minfps) : ctx = canvas.getContext('2d') {
-    int n = 120;
+    int n = 0;
     Vec2 center = _p2.vmul(0.5);
     double rad = 2*20.0;
     for(int i=0; i<n; i++) {
@@ -21,11 +23,12 @@ class Sim {
       space.add(new Circle.vec(center.vadd(offset), 0.5)
         ..ctrl = new Agent(center.vsub(offset)));
     }
-    /*int n = 30, m = 2;
+    n = 30; int m = 2;
+    //n=0; m=0;
     for(int i=0; i<n; i++) {
       for(int j=0; j<m; j++) {
-        Vec2 offset = new Vec2(20.0*j/m, 40.0*i/n);
-        Vec2 left = offset.vadd(new Vec2(10.0,10.0)).vmul(2.0),
+        Vec2 offset = new Vec2(10.0*j/(m-1), 40.0*i/(n-1));
+        Vec2 left = offset.vadd(new Vec2(20.0,10.0)).vmul(2.0),
           right = offset.vadd(new Vec2(50.0,10.0)).vmul(2.0);
         space.add(new Circle.vec(left, 0.5)
           ..ctrl = new Agent(right));
@@ -33,7 +36,7 @@ class Sim {
           ..ctrl = new Agent(left));
 
       }
-    }*/
+    }
     window.animationFrame.then(raf);
   }
   void raf(double time) {
@@ -43,18 +46,29 @@ class Sim {
     window.animationFrame.then(raf);
   }
   void tick(double dt) {
+    HashMap<Shape, Vec2> disps = new HashMap();
     // TODO subclass used in loop
     for(Circle s in space.vals) {
       s.ctrl.control(s, space);
       // TODO better selection process
       for(Circle o in space.within(s.r*2, s)) {
-        if(s.vsub(o).vsqmag <= pow((s.r+o.r)*1.1, 2)) {
-          s.v = s.v.vadd(s.vsub(o).vnorm(3*dt));
+        double sqdist = s.vsub(o).vsqmag;
+        if(sqdist <= pow((s.r+o.r)*1.1, 2)) {
+          Vec2 push = s.vsub(o).vnorm(3*dt);
+          s.v = s.v.vadd(push);
+          if(sqdist <= pow(s.r+o.r, 2)) {
+            disps.putIfAbsent(s, () => new Vec2());
+            disps.putIfAbsent(o, () => new Vec2());
+            disps[s] = disps[s].vadd(push);
+            disps[o] = disps[o].vadd(push);
+          }
         }
       }
     }
-    for(Shape s in space.vals)
+    for(Shape s in space.vals) {
+      s.vcopy(s.vadd(disps[s]));
       s.step(dt);
+    }
   }
   void render() {
     int w = canvas.width, h = canvas.height;
