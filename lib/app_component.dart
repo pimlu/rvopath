@@ -6,7 +6,7 @@ import 'sim/sim.dart';
 @Component(
   selector: 'my-app',
   template: '''
-<h2>RVO pathfinding</h2>
+<h2>RVO avoidance</h2>
 <canvas #c width="0" height="0">
 ''',
   preserveWhitespace: false
@@ -25,6 +25,6 @@ class AppComponent implements AfterViewInit {
     canvas.height = (h*window.devicePixelRatio).round();
     canvas.style.width = '${w}px';
     canvas.style.height = '${h}px';
-    sim = new Sim(canvas, 60.0);
+    sim = new Sim(canvas, 30.0);
   }
 }
