@@ -1,21 +1,30 @@
-import 'dart:math';
-import 'package:angular/angular.dart';
+import 'dart:html';
 
-import 'rvo/shapes.dart';
+import 'package:angular/angular.dart';
+import 'sim/sim.dart';
 
 @Component(
   selector: 'my-app',
-  template: '<h1>Hello {{name}}</h1>',
+  template: '''
+<h2>RVO pathfinding</h2>
+<canvas #c width="0" height="0">
+''',
+  preserveWhitespace: false
 )
-class AppComponent {
-  var name = 'Angular';
-  AppComponent() {
-    Circle c1 = new Circle(0.0, 0.0, 0.5);
-    c1.v.pset(0.0, 1.0);
-    Circle c2 = new Circle(1.0, 1.0, 0.5);
-    c2.v.pset(-1.0, 0.0);
-    print(c1.vo(c2));
-    c2.pset(1.0-1.1/sqrt(2), 1.0+1.1/sqrt(2));
-    print(c1.vo(c2));
+class AppComponent implements AfterViewInit {
+  @ViewChild('c')
+  ElementRef canvasRef;
+  CanvasElement get canvas => canvasRef.nativeElement;
+  Sim sim;
+  AppComponent();
+
+  @override
+  ngAfterViewInit() {
+    int w = 800, h = 600;
+    canvas.width = (w*window.devicePixelRatio).round();
+    canvas.height = (h*window.devicePixelRatio).round();
+    canvas.style.width = '${w}px';
+    canvas.style.height = '${h}px';
+    sim = new Sim(canvas, 60.0);
   }
 }

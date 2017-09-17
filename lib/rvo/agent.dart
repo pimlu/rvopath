@@ -1,7 +1,12 @@
 import '../spatial/spatial.dart';
 
-class Agent extends Point {
-  double rad = 0.5;
+import 'controller.dart';
+import 'shapes.dart';
+
+class Agent extends Controller {
   double seedist = 5.0;
-  Point v = new Point();
+  @override
+  void control(Shape shape, Spatial<Shape> space) {
+    // TODO: implement control
+  }
 }
