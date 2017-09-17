@@ -53,8 +53,8 @@ class Sim {
       for(Circle o in space.within(s.r*2, s)) {
         double sqdist = s.vsub(o).vsqmag;
         if(sqdist <= pow((s.r+o.r)*1.1, 2)) {
-          Vec2 push = s.vsub(o).vnorm(3*dt);
-          s.v = s.v.vadd(push);
+          Vec2 push = s.vsub(o).vnorm(dt);
+          s.v = s.v.vadd(push.vmul(3.0));
           if(sqdist <= pow(s.r+o.r, 2)) {
             disps.putIfAbsent(s, () => new Vec2());
             disps.putIfAbsent(o, () => new Vec2());
