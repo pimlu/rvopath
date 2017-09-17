@@ -10,8 +10,8 @@ final int scanRes = 17;//, subscanRes = 4, scanDepth = 2;
 class Agent extends Controller {
   Vec2 goalp;
   double w = 5.0, u=1.0;
-  double seeDist = 4.0;
-  double maxa = 10.0;
+  double seeDist = 3.0;
+  double maxa = 20.0;
   Agent(this.goalp);
   @override
   void control(Shape shape, Spatial<Shape> space) {
@@ -30,7 +30,7 @@ class Agent extends Controller {
         double colt = local.map((s) => shape.vo(s)).fold(double.INFINITY, min);
         double dmag = shape.v.vsub(goalv).vmag;
         double rot = u*shape.v.vnorm().vzcomp(goalv.vnorm());
-        double penalty = w/colt + dmag + rot;
+        double penalty = w/pow(colt, 1.5) + dmag + rot;
         if(penalty < best) {
           best = penalty;
           bestv = shape.v;
