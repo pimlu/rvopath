@@ -39,11 +39,12 @@ class Circle extends Shape {
       if(diff.vsqmag <= rsum*rsum) return 0.0;
       if(diff.vdot(rv) < 0) return double.INFINITY;
       double top = (p0.vzcomp(rv) + p2.vzcomp(p1)).abs();
-      double dist = top/rv.vmag;
+      double speed = rv.vmag;
+      double dist = top/speed;
       if(dist > rsum) return double.INFINITY;
       // ericleong.me/research/circle-circle/
       double backdist = sqrt(rsum*rsum - dist*dist);
-      return (diff.vmag-backdist)/rv.vmag;
+      return (diff.vmag-backdist)/speed;
     }
     throw new StateError('Not in compatible shapes');
   }

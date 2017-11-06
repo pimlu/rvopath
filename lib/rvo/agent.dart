@@ -19,12 +19,12 @@ class Agent extends Controller {
       .toList(growable: false);
     double maxv = shape.maxv;
     Vec2 goalv = goalp.vsub(shape).vnorm(maxv);
-    Vec2 oldv = shape.v, bestv = new Vec2();
+    Vec2 oldv = shape.v.vclone, bestv = new Vec2();
     double best = double.INFINITY;
     double width = 2.0/(scanRes-1);
     for(int i=0; i<scanRes; i++) {
       for(int j=0; j<scanRes; j++) {
-        shape.v = new Vec2(maxv*(-1+j*width), maxv*(-1+i*width));
+        shape.v.vset(maxv*(-1+j*width), maxv*(-1+i*width));
         if(shape.v.vmag > maxv) continue;
 
         double colt = local.map((s) => shape.vo(s)).fold(double.INFINITY, min);
@@ -33,7 +33,7 @@ class Agent extends Controller {
         double penalty = w/pow(colt, 1.5) + dmag + rot;
         if(penalty < best) {
           best = penalty;
-          bestv = shape.v;
+          bestv = shape.v.vclone;
         }
       }
     }
